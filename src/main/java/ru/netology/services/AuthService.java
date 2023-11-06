@@ -16,21 +16,20 @@ import java.util.Map;
 
 @Service
 public class AuthService {
-    private final AuthenticationManager authenticationManager;
+
     private final JwtTokenUtils jwtTokenUtils;
     private final Map<String, String> tokenStore = new HashMap<>();
 
-    public AuthService(AuthenticationManager authenticationManager, JwtTokenUtils jwtTokenUtils) {
-        this.authenticationManager = authenticationManager;
+    public AuthService(JwtTokenUtils jwtTokenUtils) {
+
         this.jwtTokenUtils = jwtTokenUtils;
     }
 
-    public String loginUser(AuthRequest authRequest) {
+    public String loginUser(Authentication authentication, String login) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLogin(),authRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenUtils.generateToken(authentication);
-            tokenStore.put(token, authRequest.getLogin());
+            tokenStore.put(token, login);
             return token;
 
         } catch (AuthenticationException ex) {
