@@ -1,14 +1,11 @@
 package ru.netology.services;
 
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.netology.dto.AuthRequest;
+import ru.netology.entities.User;
 import ru.netology.security.JwtTokenUtils;
 
 import java.util.HashMap;
@@ -27,11 +24,11 @@ public class AuthService {
 
     public String loginUser(Authentication authentication, String login) {
         try {
+            //User user = (User) authentication.getPrincipal();
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenUtils.generateToken(authentication);
             tokenStore.put(token, login);
             return token;
-
         } catch (AuthenticationException ex) {
             throw new BadCredentialsException("Bad credentials");
         }

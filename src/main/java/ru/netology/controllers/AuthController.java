@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 public class AuthController {
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
-    private final Logger logger = Logger.getLogger(AuthController.class.getName());
 
     public AuthController(AuthService authService, AuthenticationManager authenticationManager) {
         this.authService = authService;
@@ -31,11 +30,8 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getLogin(), authRequest.getPassword()));
         String token = authService.loginUser(authentication, login);
-        if (token == null) {
-            logger.log(Level.SEVERE, "User %s not found", login);
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        return new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK);
+        return token != null ? new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("login")
