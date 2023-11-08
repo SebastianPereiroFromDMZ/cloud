@@ -31,13 +31,13 @@ public class AuthServiceTest {
     private final UsernamePasswordAuthenticationToken badAuthenticationToken = new UsernamePasswordAuthenticationToken(BAD_USERNAME, PASSWORD);
     private final String token = UUID.randomUUID().toString();
 
-    private final String badToken = "12";
+    private final String badToken = "badToken";
     private final AuthRequest authRequest = new AuthRequest(USERNAME, PASSWORD);
 
-//    @Test
-//    void loginUserTest() {
-//        Authentication authentication = authenticationManager.authenticate(badAuthenticationToken);
-//        given(jwtTokenUtils.generateToken(authentication)).willReturn(badToken);
-//        assertEquals(token, authService.loginUser(authentication, null));
-//    }
+    @Test
+    void loginUserTest() {
+        Authentication authentication = authenticationManager.authenticate(badAuthenticationToken);
+        given(jwtTokenUtils.generateToken(authentication)).willReturn(badToken);
+        assertEquals(token, authService.loginUser(authentication));
+    }
 }

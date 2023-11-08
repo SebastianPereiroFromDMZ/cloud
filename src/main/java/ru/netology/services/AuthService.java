@@ -6,6 +6,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.netology.entities.User;
+import ru.netology.model.SecurityUser;
 import ru.netology.security.JwtTokenUtils;
 
 import java.util.HashMap;
@@ -22,9 +23,10 @@ public class AuthService {
         this.jwtTokenUtils = jwtTokenUtils;
     }
 
-    public String loginUser(Authentication authentication, String login) {
+    public String loginUser(Authentication authentication) {
         try {
-            //User user = (User) authentication.getPrincipal();
+            SecurityUser user = (SecurityUser) authentication.getPrincipal();
+            String login = user.getUsername();
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenUtils.generateToken(authentication);
             tokenStore.put(token, login);

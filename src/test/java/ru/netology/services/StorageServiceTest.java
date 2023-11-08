@@ -57,9 +57,8 @@ class StorageServiceTest {
         file.setFilename(FILENAME);
         file.setContent(content);
         file.setSize(36L);
-        MultipartFile multipartFile = new MockMultipartFile(FILENAME, content);
 
-        storageService.uploadFile(token, FILENAME, multipartFile);
+        storageService.uploadFile(token, file);
 
         verify(fileRepository, times(1)).save(file);
     }

@@ -2,7 +2,6 @@ package ru.netology.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import ru.netology.dto.FileResponse;
 import ru.netology.entities.File;
 import ru.netology.repositories.FileRepository;
@@ -32,9 +31,9 @@ public class StorageService {
                 .collect(Collectors.toList());
     }
 
-    public void uploadFile(String authToken, String filename, MultipartFile file) throws IOException {
+    public void uploadFile(String authToken, File file) throws IOException {
         String owner = jwtTokenUtils.getUsernameFromToken(authToken.substring(7));
-        fileRepository.save(new File(filename, file.getContentType(), file.getSize(), file.getBytes(), owner));
+        fileRepository.save(new File(file.getFilename(), file.getType(), file.getSize(), file.getContent(), owner));
     }
 
     public void deleteFile(String authToken, String filename) {

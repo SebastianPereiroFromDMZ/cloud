@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.dto.FileResponse;
 import ru.netology.entities.File;
+import ru.netology.security.JwtTokenUtils;
 import ru.netology.services.StorageService;
 
 import java.io.IOException;
@@ -33,7 +34,8 @@ public class StorageController {
     public ResponseEntity<?> uploadFile(@RequestHeader("auth-token") String authToken,
                                         @RequestParam("filename") String filename,
                                         @RequestBody MultipartFile file) throws IOException {
-        storageService.uploadFile(authToken, filename, file);
+        File file1 = new File(filename, file.getContentType(), file.getSize(), file.getBytes());
+        storageService.uploadFile(authToken, file1);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

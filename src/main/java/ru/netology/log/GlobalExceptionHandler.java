@@ -24,7 +24,6 @@ public class GlobalExceptionHandler {
         // Запись лога
         logger.log(Level.SEVERE,logMessage, ex);
 
-
         // Возврат ответа с описанием ошибки
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
