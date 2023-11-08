@@ -17,14 +17,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleAllExceptions(Exception ex, WebRequest request) {
-        // Создание записи лога
         String logMessage = String.format("Exception: %s, message: %s, request: %s",
                 ex.getClass().getName(), ex.getMessage(), request.getDescription(false));
 
-        // Запись лога
         logger.log(Level.SEVERE,logMessage, ex);
 
-        // Возврат ответа с описанием ошибки
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

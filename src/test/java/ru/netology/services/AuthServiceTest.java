@@ -5,39 +5,33 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import ru.netology.dto.AuthRequest;
+import ru.netology.entities.User;
+import ru.netology.model.SecurityUser;
 import ru.netology.security.JwtTokenUtils;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
     @InjectMocks
     private AuthService authService;
-    @Mock
-    private AuthenticationManager authenticationManager;
+
     @Mock
     private JwtTokenUtils jwtTokenUtils;
-    private final String USERNAME = "admin";
-    private final String PASSWORD = "admin";
-    private final String BAD_USERNAME = "bad_admin";
-    private final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD);
-    private final UsernamePasswordAuthenticationToken badAuthenticationToken = new UsernamePasswordAuthenticationToken(BAD_USERNAME, PASSWORD);
     private final String token = UUID.randomUUID().toString();
-
-    private final String badToken = "badToken";
-    private final AuthRequest authRequest = new AuthRequest(USERNAME, PASSWORD);
+    private final SecurityUser user = new SecurityUser(new User());
 
     @Test
     void loginUserTest() {
-        Authentication authentication = authenticationManager.authenticate(badAuthenticationToken);
-        given(jwtTokenUtils.generateToken(authentication)).willReturn(badToken);
+        final Authentication authentication = mock(Authentication.class);
+        given(jwtTokenUtils.generateToken(authentication)).willReturn(token);
+        given((SecurityUser) authentication.getPrincipal()).willReturn(user);
+
         assertEquals(token, authService.loginUser(authentication));
     }
 }
